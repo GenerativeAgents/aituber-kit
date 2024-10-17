@@ -4,7 +4,7 @@ class RealtimeAPITools {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        Authorization: 'Bearer app-9KCXiKO7kFbAfrB8ZHGInPYJ',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DIFY_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
