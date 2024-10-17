@@ -1,4 +1,24 @@
 class RealtimeAPITools {
+  async search_web(query: string): Promise<Response> {
+    const url = 'https://api.dify.ai/v1/workflows/run'
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer app-9KCXiKO7kFbAfrB8ZHGInPYJ',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        inputs: { query: query },
+        response_mode: 'blocking',
+        user: 'abc-123',
+      }),
+    })
+    console.log(response)
+
+    const data = await response.json()
+    return data.data.outputs.text
+  }
+
   async get_current_weather(
     latitude: number,
     longitude: number,
