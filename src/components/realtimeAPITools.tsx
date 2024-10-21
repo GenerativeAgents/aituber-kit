@@ -60,6 +60,44 @@ class RealtimeAPITools {
     return '不明'
   }
 
+  async add_task(description: string): Promise<string> {
+    if (typeof window === 'undefined') {
+      console.error('サーバーサイドでは実行できません。')
+      return 'タスクの登録に失敗しました'
+    }
+
+    const urlParams = new URLSearchParams(window.location.search)
+    const responseChannelId = urlParams.get('channel_id')
+    const responseThreadId = urlParams.get('thread_id')
+
+    if (!responseChannelId || !responseThreadId) {
+      console.error('URL に channel_id または thread_id が含まれていません。')
+      return 'タスクの登録に失敗しました'
+    }
+
+    try {
+      const response = await fetch('/api/add_task', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          description,
+          response_channel_id: responseChannelId,
+          response_thread_id: responseThreadId,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('APIリクエストが失敗しました')
+      }
+
+      const data = await response.json()
+      return data.message
+    } catch (error) {
+      console.error('タスク登録中にエラーが発生しました:', error)
+      return 'タスクの登録に失敗しました'
+    }
+  }
+
   // Add other functions here
 }
 

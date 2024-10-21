@@ -40,5 +40,20 @@
       },
       "required": ["query"]
     }
+  },
+  {
+    "type": "function",
+    "name": "add_task",
+    "description": "Registers a task.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description of the task"
+        }
+      },
+      "required": ["description"]
+    }
   }
 ]
