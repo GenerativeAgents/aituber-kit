@@ -1,4 +1,24 @@
 class RealtimeAPITools {
+  async search_web(query: string): Promise<Response> {
+    const url = 'https://api.dify.ai/v1/workflows/run'
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DIFY_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        inputs: { query: query },
+        response_mode: 'blocking',
+        user: 'abc-123',
+      }),
+    })
+    console.log(response)
+
+    const data = await response.json()
+    return data.data.outputs.text
+  }
+
   async get_current_weather(
     latitude: number,
     longitude: number,
@@ -38,6 +58,44 @@ class RealtimeAPITools {
     if (code === 45) return '霧'
     if (code >= 71 && code <= 75) return '雪'
     return '不明'
+  }
+
+  async add_task(description: string): Promise<string> {
+    if (typeof window === 'undefined') {
+      console.error('サーバーサイドでは実行できません。')
+      return 'タスクの登録に失敗しました'
+    }
+
+    const urlParams = new URLSearchParams(window.location.search)
+    const responseChannelId = urlParams.get('channel_id')
+    const responseThreadId = urlParams.get('thread_id')
+
+    if (!responseChannelId || !responseThreadId) {
+      console.error('URL に channel_id または thread_id が含まれていません。')
+      return 'タスクの登録に失敗しました'
+    }
+
+    try {
+      const response = await fetch('/api/add_task', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          description,
+          response_channel_id: responseChannelId,
+          response_thread_id: responseThreadId,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('APIリクエストが失敗しました')
+      }
+
+      const data = await response.json()
+      return data.message
+    } catch (error) {
+      console.error('タスク登録中にエラーが発生しました:', error)
+      return 'タスクの登録に失敗しました'
+    }
   }
 
   // Add other functions here

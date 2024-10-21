@@ -44,3 +44,6 @@ certificates
 
 /public/slides/*
 !/public/slides/demo/
+
+# Sentry Config File
+.env.sentry-build-plugin
