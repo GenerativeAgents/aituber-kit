@@ -17,19 +17,25 @@ jobs:
     - name: Install Flyctl
       uses: superfly/flyctl-actions/setup-flyctl@v1
 
+    - name: Set Fly.io Secrets
+      run: |
+        flyctl secrets set \
+          NEXT_PUBLIC_SELECT_AI_SERVICE="${{ secrets.NEXT_PUBLIC_SELECT_AI_SERVICE }}" \
+          NEXT_PUBLIC_AZURE_KEY="${{ secrets.NEXT_PUBLIC_AZURE_KEY }}" \
+          NEXT_PUBLIC_AZURE_ENDPOINT="${{ secrets.NEXT_PUBLIC_AZURE_ENDPOINT }}" \
+          NEXT_PUBLIC_BACKGROUND_IMAGE_PATH="${{ secrets.NEXT_PUBLIC_BACKGROUND_IMAGE_PATH }}" \
+          NEXT_PUBLIC_SHOW_INTRODUCTION="${{ secrets.NEXT_PUBLIC_SHOW_INTRODUCTION }}" \
+          NEXT_PUBLIC_REALTIME_API_MODE="${{ secrets.NEXT_PUBLIC_REALTIME_API_MODE }}" \
+          NEXT_PUBLIC_SYSTEM_PROMPT="${{ secrets.NEXT_PUBLIC_SYSTEM_PROMPT }}" \
+          BASIC_AUTH_USER="${{ secrets.BASIC_AUTH_USER }}" \
+          BASIC_AUTH_PASSWORD="${{ secrets.BASIC_AUTH_PASSWORD }}" \
+          NEXT_PUBLIC_DIFY_API_KEY="${{ secrets.NEXT_PUBLIC_DIFY_API_KEY }}" \
+          NEXT_PUBLIC_SLACKGPTS_API_BASE="${{ secrets.NEXT_PUBLIC_SLACKGPTS_API_BASE }}" \
+          NEXT_PUBLIC_SLACKGPTS_API_KEY="${{ secrets.NEXT_PUBLIC_SLACKGPTS_API_KEY }}"
+      env:
+        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
     - name: Deploy to Fly.io
       run: flyctl deploy
       env:
         FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        NEXT_PUBLIC_SELECT_AI_SERVICE: ${{ secrets.NEXT_PUBLIC_SELECT_AI_SERVICE }}
-        NEXT_PUBLIC_AZURE_KEY: ${{ secrets.NEXT_PUBLIC_AZURE_KEY }}
-        NEXT_PUBLIC_AZURE_ENDPOINT: ${{ secrets.NEXT_PUBLIC_AZURE_ENDPOINT }}
-        NEXT_PUBLIC_BACKGROUND_IMAGE_PATH: ${{ secrets.NEXT_PUBLIC_BACKGROUND_IMAGE_PATH }}
-        NEXT_PUBLIC_SHOW_INTRODUCTION: ${{ secrets.NEXT_PUBLIC_SHOW_INTRODUCTION }}
-        NEXT_PUBLIC_REALTIME_API_MODE: ${{ secrets.NEXT_PUBLIC_REALTIME_API_MODE }}
-        NEXT_PUBLIC_SYSTEM_PROMPT: ${{ secrets.NEXT_PUBLIC_SYSTEM_PROMPT }}
-        BASIC_AUTH_USER: ${{ secrets.BASIC_AUTH_USER }}
-        BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
-        NEXT_PUBLIC_DIFY_API_KEY: ${{ secrets.NEXT_PUBLIC_DIFY_API_KEY }}
-        NEXT_PUBLIC_SLACKGPTS_API_BASE: ${{ secrets.NEXT_PUBLIC_SLACKGPTS_API_BASE }}
-        NEXT_PUBLIC_SLACKGPTS_API_KEY: ${{ secrets.NEXT_PUBLIC_SLACKGPTS_API_KEY }}
