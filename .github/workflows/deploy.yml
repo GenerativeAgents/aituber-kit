@@ -15,9 +15,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install Flyctl
-      uses: superfly/flyctl-actions@v1
+      uses: superfly/flyctl-actions/setup-flyctl@v1
 
     - name: Deploy to Fly.io
+      run: fly deploy
       env:
         FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
         NEXT_PUBLIC_SELECT_AI_SERVICE: ${{ secrets.NEXT_PUBLIC_SELECT_AI_SERVICE }}
@@ -32,4 +33,3 @@ jobs:
         NEXT_PUBLIC_DIFY_API_KEY: ${{ secrets.NEXT_PUBLIC_DIFY_API_KEY }}
         NEXT_PUBLIC_SLACKGPTS_API_BASE: ${{ secrets.NEXT_PUBLIC_SLACKGPTS_API_BASE }}
         NEXT_PUBLIC_SLACKGPTS_API_KEY: ${{ secrets.NEXT_PUBLIC_SLACKGPTS_API_KEY }}
-      run: fly deploy
