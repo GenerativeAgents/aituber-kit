@@ -14,6 +14,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Install Fly.io CLI
+      run: |
+        curl -L https://fly.io/install.sh | sh
+        export PATH=$HOME/.fly/bin:$PATH
+
     - name: Set up Fly.io CLI
       uses: superfly/flyctl-actions/setup-flyctl@master
 
