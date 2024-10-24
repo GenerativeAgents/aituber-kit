@@ -25,5 +25,35 @@
       },
       "required": ["timezone", "latitude", "longitude", "location"]
     }
+  },
+  {
+    "type": "function",
+    "name": "search_web",
+    "description": "Search the web for user queries. If you use this tool, you must inform the user that you will look it up before calling this tool.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The search query"
+        }
+      },
+      "required": ["query"]
+    }
+  },
+  {
+    "type": "function",
+    "name": "add_task",
+    "description": "Registers a task.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description of the task"
+        }
+      },
+      "required": ["description"]
+    }
   }
 ]
