@@ -9,11 +9,13 @@ import { TextButton } from '../textButton'
 import { useCallback } from 'react'
 import { multiModalAIServices } from '@/features/stores/settings'
 import {
+  AudioModeInputType,
+  OpenAITTSVoice,
   RealtimeAPIModeContentType,
   RealtimeAPIModeVoice,
+  RealtimeAPIModeAzureVoice,
 } from '@/features/constants/settings'
 import toastStore from '@/features/stores/toast'
-import { sendSessionUpdate } from '@/components/realtimeAPIUtils'
 import { reconnectWebSocket } from '@/components/realtimeAPIUtils'
 
 const ModelProvider = () => {
@@ -23,6 +25,9 @@ const ModelProvider = () => {
     (s) => s.realtimeAPIModeContentType
   )
   const realtimeAPIModeVoice = settingsStore((s) => s.realtimeAPIModeVoice)
+  const audioMode = settingsStore((s) => s.audioMode)
+  const audioModeInputType = settingsStore((s) => s.audioModeInputType)
+  const audioModeVoice = settingsStore((s) => s.audioModeVoice)
   const openaiKey = settingsStore((s) => s.openaiKey)
   const anthropicKey = settingsStore((s) => s.anthropicKey)
   const googleKey = settingsStore((s) => s.googleKey)
@@ -93,6 +98,18 @@ const ModelProvider = () => {
     settingsStore.setState({
       realtimeAPIMode: newMode,
     })
+    if (newMode) {
+      settingsStore.setState({ audioMode: false })
+    }
+  }, [])
+
+  const handleAudioModeChange = useCallback((newMode: boolean) => {
+    settingsStore.setState({
+      audioMode: newMode,
+    })
+    if (newMode) {
+      settingsStore.setState({ realtimeAPIMode: false })
+    }
   }, [])
 
   const handleUpdate = useCallback(() => {
@@ -205,8 +222,13 @@ const ModelProvider = () => {
                       }}
                     >
                       <option value="alloy">alloy</option>
+                      <option value="ash">ash</option>
+                      <option value="ballad">ballad</option>
+                      <option value="coral">coral</option>
                       <option value="echo">echo</option>
+                      <option value="sage">sage</option>
                       <option value="shimmer">shimmer</option>
+                      <option value="verse">verse</option>
                     </select>
                     <div className="my-16">
                       <div className="my-16">
@@ -219,7 +241,61 @@ const ModelProvider = () => {
                   </>
                 )}
               </div>
-              {!realtimeAPIMode && (
+              <div className="my-24">
+                <div className="my-16 typography-20 font-bold">
+                  {t('AudioMode')}
+                </div>
+                <div className="my-8">
+                  <TextButton
+                    onClick={() => {
+                      handleAudioModeChange(!audioMode)
+                    }}
+                  >
+                    {audioMode ? t('StatusOn') : t('StatusOff')}
+                  </TextButton>
+                </div>
+                {audioMode && (
+                  <>
+                    <div className="my-16 font-bold">
+                      {t('RealtimeAPIModeContentType')}
+                    </div>
+                    <select
+                      className="px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
+                      value={audioModeInputType}
+                      onChange={(e) => {
+                        const model = e.target.value
+                        settingsStore.setState({
+                          audioModeInputType: model as AudioModeInputType,
+                        })
+                      }}
+                    >
+                      <option value="input_text">{t('InputText')}</option>
+                      <option value="input_audio">{t('InputAudio')}</option>
+                    </select>
+                    <div className="my-16 font-bold">
+                      {t('realtimeAPIModeVoice')}
+                    </div>
+                    <select
+                      className="px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
+                      value={audioModeVoice}
+                      onChange={(e) => {
+                        const model = e.target.value
+                        settingsStore.setState({
+                          audioModeVoice: model as OpenAITTSVoice,
+                        })
+                      }}
+                    >
+                      <option value="alloy">alloy</option>
+                      <option value="echo">echo</option>
+                      <option value="fable">fable</option>
+                      <option value="onyx">onyx</option>
+                      <option value="nova">nova</option>
+                      <option value="shimmer">shimmer</option>
+                    </select>
+                  </>
+                )}
+              </div>
+              {!realtimeAPIMode && !audioMode && (
                 <div className="my-24">
                   <div className="my-16 typography-20 font-bold">
                     {t('SelectModel')}
@@ -443,12 +519,21 @@ const ModelProvider = () => {
                       onChange={(e) => {
                         const model = e.target.value
                         settingsStore.setState({
-                          realtimeAPIModeVoice: model as RealtimeAPIModeVoice,
+                          realtimeAPIModeVoice:
+                            model as RealtimeAPIModeAzureVoice,
                         })
                       }}
                     >
                       <option value="alloy">alloy</option>
+                      <option value="amuch">amuch</option>
+                      <option value="breeze">breeze</option>
+                      <option value="cove">cove</option>
+                      <option value="dan">dan</option>
                       <option value="echo">echo</option>
+                      <option value="elan">elan</option>
+                      <option value="ember">ember</option>
+                      <option value="jupiter">jupiter</option>
+                      <option value="marilyn">marilyn</option>
                       <option value="shimmer">shimmer</option>
                     </select>
                     <div className="my-16">
